@@ -1,5 +1,6 @@
 async function detectDisease() {
     document.querySelector("#loading").style.display = "block"
+    document.querySelector("#preview-box").style.display = "none"
 
 
     const input = document.getElementById("dropzone-file");
@@ -69,3 +70,20 @@ async function detectDisease() {
 
     reader.readAsDataURL(file);
   }
+
+
+
+function previewImage(e) {
+    const file = e.target.files[0];
+    if (file) {
+        let imageSrc = URL.createObjectURL(file);
+        let imageHeading = document.getElementById("preview-heading");
+        let imagePreview = document.getElementById("preview");
+        let imageBox = document.getElementById("preview-box");
+        imageBox.style.display = "block";
+        imageHeading.innerText = "📸 Preview of your image:";
+        imagePreview.style.display = "block";
+        imagePreview.src = imageSrc;
+    }
+
+}

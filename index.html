@@ -2,73 +2,87 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
-  <title>Plant Disease Detector 🌿</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Plant Disease Detector 🌿</title>
 </head>
 
-<body class="bg-gradient-to-br from-green-50 to-lime-100 min-h-screen p-4 font-sans">
+<body class="bg-gradient-to-br from-green-50 to-lime-100 h-auto pb-32 font-sans">
 
-  <h1 class="text-center text-4xl font-bold text-green-800 mt-10">🌿 Plant Disease Detector</h1>
+    <h1 class="text-center text-4xl font-bold text-green-800 mt-10">🌿 Plant Disease Detector</h1>
 
-  <div class="flex flex-col md:flex-row items-start justify-center gap-10 mt-14 max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row items-start justify-center gap-10 mt-14 max-w-6xl mx-auto">
 
-    <!-- Upload Section -->
-    <div class="w-full md:w-1/2">
-      <label for="dropzone-file"
-        class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-green-400 rounded-xl cursor-pointer bg-white hover:bg-green-50 transition shadow-sm">
-        <div class="flex flex-col items-center justify-center pointer-events-none">
-          <svg class="w-10 h-10 mb-2 text-green-500" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v9m0-9L8 16m4-4l4 4M12 3v9" />
-          </svg>
-          <p class="text-sm text-green-700"><span class="font-semibold">Click to upload</span> or drag an image</p>
-          <p class="text-xs text-gray-400">PNG, JPG, JPEG (Max 800x400px)</p>
+        <!-- Upload Section -->
+        <div class="w-full md:w-1/2">
+            <label for="dropzone-file"
+                class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-green-400 rounded-xl cursor-pointer bg-white hover:bg-green-50 transition shadow-sm">
+                <div class="flex flex-col items-center justify-center pointer-events-none">
+                    <svg class="w-10 h-10 mb-2 text-green-500" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v9m0-9L8 16m4-4l4 4M12 3v9" />
+                    </svg>
+                    <p class="text-sm text-green-700"><span class="font-semibold">Click to upload</span> or drag an
+                        image</p>
+                    <p class="text-xs text-gray-400">PNG, JPG, JPEG (Max 800x400px)</p>
+                </div>
+                <input id="dropzone-file" type="file" accept="image/*" class="hidden" onchange="previewImage(event)"/>
+            </label>
+
+            <!-- Detect Button -->
+            <button type="button"
+                class="mt-6 w-full text-white bg-gradient-to-r from-green-400 to-lime-500 hover:from-green-500 hover:to-lime-600 font-semibold rounded-lg text-sm px-5 py-3 shadow-md transition"
+                onclick="detectDisease()">🚀 Detect Disease</button>
         </div>
-        <input id="dropzone-file" type="file" accept="image/*" class="hidden" />
-      </label>
 
-      <!-- Detect Button -->
-      <button type="button"
-        class="mt-6 w-full text-white bg-gradient-to-r from-green-400 to-lime-500 hover:from-green-500 hover:to-lime-600 font-semibold rounded-lg text-sm px-5 py-3 shadow-md transition"
-        onclick="detectDisease()">🚀 Detect Disease</button>
+        <!-- Results Section -->
+        <div id="result-box" class="w-full md:w-1/2 hidden text-left bg-white p-5 rounded-xl shadow-lg">
+            <img id="result-image" class="w-full max-h-64 rounded-lg object-contain mb-4 hidden" />
+            <div id="result" class="text-xl font-semibold text-green-800 mb-2"></div>
+            <p id="score" class="text-lg text-green-600"></p>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="hidden h-64 w-64 z-50 flex items-center justify-center">
+            <div class="flex gap-3 justify-center items-center h-[100%]">
+                <div id="wifi-loader">
+                    <svg class="circle-outer" viewBox="0 0 86 86">
+                        <circle class="back" cx="43" cy="43" r="40"></circle>
+                        <circle class="front" cx="43" cy="43" r="40"></circle>
+                        <circle class="new" cx="43" cy="43" r="40"></circle>
+                    </svg>
+                    <svg class="circle-middle" viewBox="0 0 60 60">
+                        <circle class="back" cx="30" cy="30" r="27"></circle>
+                        <circle class="front" cx="30" cy="30" r="27"></circle>
+                    </svg>
+                    <svg class="circle-inner" viewBox="0 0 34 34">
+                        <circle class="back" cx="17" cy="17" r="14"></circle>
+                        <circle class="front" cx="17" cy="17" r="14"></circle>
+                    </svg>
+                    <div class="text" data-text="Fetching"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Results Section -->
-    <div id="result-box" class="w-full md:w-1/2 hidden text-left bg-white p-5 rounded-xl shadow-lg">
-      <img id="result-image" class="w-full max-h-64 rounded-lg object-contain mb-4 hidden" />
-      <div id="result" class="text-xl font-semibold text-green-800 mb-2"></div>
-      <p id="score" class="text-lg text-green-600"></p>
+    <!-- Preview Image -->
+    <!-- <div class="preview" class="hidden mt-10 bg-red-500 pb-5" id="preview-box">
+        <h1 class="text-2xl text-center" id="preview-heading"></h1>
+        <img src="" alt="" id="preview" class="hidden w-[30%] h-[300px] rounded-lg shadow-md mx-auto mt-5 mb-10" />
+    </div> -->
+    <div id="preview-box" class="hidden mt-10 p-6">
+        <h1 id="preview-heading" class="text-2xl text-center font-semibold text-green-800 mb-4 ">Image Preview</h1>
+
+        <img id="preview" src="" alt="Selected plant image"
+             class="hidden w-full md:w-1/3 h-[300px] object-contain mx-auto h-64 w-[650px] rounded-md   " />
     </div>
 
 
-  <!-- Loading Spinner -->
-  <div id="loading" class="hidden h-64 w-64 z-50 flex items-center justify-center">
-    <div class="flex gap-3 justify-center items-center h-[100%]">
-<div id="wifi-loader">
-    <svg class="circle-outer" viewBox="0 0 86 86">
-        <circle class="back" cx="43" cy="43" r="40"></circle>
-        <circle class="front" cx="43" cy="43" r="40"></circle>
-        <circle class="new" cx="43" cy="43" r="40"></circle>
-    </svg>
-    <svg class="circle-middle" viewBox="0 0 60 60">
-        <circle class="back" cx="30" cy="30" r="27"></circle>
-        <circle class="front" cx="30" cy="30" r="27"></circle>
-    </svg>
-    <svg class="circle-inner" viewBox="0 0 34 34">
-        <circle class="back" cx="17" cy="17" r="14"></circle>
-        <circle class="front" cx="17" cy="17" r="14"></circle>
-    </svg>
-    <div class="text" data-text="Fetching"></div>
-</div>
-    </div>
-  </div>
-</div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
