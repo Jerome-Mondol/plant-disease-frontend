@@ -69,7 +69,7 @@ async function detectDisease() {
 
   async function getSuggestions(diseaseName) {
     try {
-      const response = await fetch("http://localhost:5000/suggest", {
+      const response = await fetch("https://plant-disease-backend-1-hxbk.onrender.com/suggest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,6 +83,7 @@ async function detectDisease() {
 
       const data = await response.json();
       console.log("Suggestions:", data.suggestions);
+
     } catch (error) {
       console.error("Suggestions Error:", error);
       alert("Failed to fetch suggestions. Please try again later.");
