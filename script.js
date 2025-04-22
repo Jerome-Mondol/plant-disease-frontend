@@ -27,7 +27,7 @@ async function detectDisease() {
       const base64Image = reader.result.split(",")[1];
 
       try {
-        const response = await fetch("https://plant-disease-backend-1-hxbk.onrender.com/detect", {
+        const response = await fetch("https://plant-disease-backend-drab.vercel.app/detect", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -69,7 +69,7 @@ async function detectDisease() {
 
   async function getSuggestions(diseaseName) {
     try {
-      const response = await fetch("https://plant-disease-backend-1-hxbk.onrender.com/suggest", {
+      const response = await fetch("https://plant-disease-backend-drab.vercel.app/suggest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
